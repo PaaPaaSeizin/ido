@@ -1,0 +1,2338 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#030611">
+<title>ANALIDO // DIGITAL ARCHIVE</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:#030611;
+  --bg2:#070d20;
+  --panel:#0a1228;
+  --cyan:#00eaff;
+  --blue:#176aff;
+  --blue2:#3760ff;
+  --purple:#8b4dff;
+  --pink:#f02bff;
+  --white:#f0f8ff;
+  --muted:#8493b1;
+  --line:rgba(0,234,255,.25);
+}
+
+* { box-sizing:border-box; }
+
+html {
+  scroll-behavior:smooth;
+  background:var(--bg);
+}
+
+body {
+  margin:0;
+  color:var(--white);
+  background:
+    radial-gradient(ellipse at 50% -10%,#152a60 0%,transparent 55%),
+    radial-gradient(ellipse at 100% 50%,rgba(42,24,112,.12),transparent 55%),
+    #030611;
+  font-family:'Noto Sans JP',sans-serif;
+  overflow-x:hidden;
+}
+
+body::after {
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:100;
+  opacity:.07;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(255,255,255,.1) 3px
+  );
+}
+
+a { color:inherit;text-decoration:none; }
+button { font:inherit;cursor:pointer; }
+
+::selection {
+  background:var(--cyan);
+  color:#00101b;
+}
+
+/* BACKGROUND */
+
+#stars {
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  width:100%;
+  height:100%;
+}
+
+.ambient {
+  position:fixed;
+  width:650px;
+  height:650px;
+  border-radius:50%;
+  filter:blur(130px);
+  opacity:.13;
+  pointer-events:none;
+  z-index:-2;
+}
+
+.ambient.a {
+  background:#006aff;
+  top:-300px;
+  left:-200px;
+}
+
+.ambient.b {
+  background:#8b32ff;
+  right:-350px;
+  bottom:-250px;
+}
+
+.mouse-glow {
+  position:fixed;
+  width:380px;
+  height:380px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(0,234,255,.13),transparent 70%);
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  z-index:-1;
+}
+
+/* LIGHT STREAKS */
+
+.light-streak {
+  position:fixed;
+  width:1px;
+  height:180px;
+  background:linear-gradient(transparent,var(--cyan),transparent);
+  opacity:.25;
+  pointer-events:none;
+  z-index:-1;
+  animation:streakMove 8s linear infinite;
+}
+
+.light-streak.s1 { left:12%;top:-200px;animation-delay:0s; }
+.light-streak.s2 { left:73%;top:-200px;animation-delay:3s;height:240px; }
+.light-streak.s3 { left:91%;top:-200px;animation-delay:5s;height:130px; }
+
+@keyframes streakMove {
+  to { transform:translateY(130vh); }
+}
+
+/* NAVIGATION */
+
+.nav {
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:76px;
+  padding:0 6%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  z-index:50;
+  background:rgba(3,6,17,.83);
+  border-bottom:1px solid rgba(0,234,255,.25);
+  box-shadow:0 5px 35px rgba(0,0,0,.4);
+  backdrop-filter:blur(18px);
+}
+
+.logo {
+  font-family:Orbitron,sans-serif;
+  font-size:23px;
+  font-weight:900;
+  letter-spacing:4px;
+  color:white;
+  text-shadow:0 0 15px var(--cyan),0 0 35px var(--blue);
+}
+
+.logo span { color:var(--cyan); }
+
+.nav-links {
+  display:flex;
+  gap:27px;
+  align-items:center;
+}
+
+.nav-links a {
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:1.5px;
+  color:#9baac6;
+  transition:.25s;
+}
+
+.nav-links a:hover {
+  color:var(--cyan);
+  text-shadow:0 0 15px var(--cyan);
+}
+
+/* HERO */
+
+.hero {
+  min-height:100svh;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:125px 20px 100px;
+  overflow:hidden;
+  background:
+    radial-gradient(ellipse at center,rgba(15,65,150,.2),transparent 65%),
+    linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.5));
+}
+
+/* MOVING FLOOR */
+
+.hero-grid {
+  position:absolute;
+  bottom:-38%;
+  left:-50%;
+  width:200%;
+  height:85%;
+  background:
+    linear-gradient(rgba(0,234,255,.18) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,234,255,.18) 1px,transparent 1px);
+  background-size:55px 55px;
+  transform:perspective(450px) rotateX(63deg);
+  transform-origin:top;
+  mask-image:linear-gradient(to bottom,transparent,black 20%,transparent);
+  animation:gridMove 5s linear infinite;
+}
+
+@keyframes gridMove {
+  from { background-position:0 0; }
+  to { background-position:0 55px; }
+}
+
+/* HERO FRAME */
+
+.hero-frame {
+  position:absolute;
+  width:min(1050px,96vw);
+  height:580px;
+  border:1px solid rgba(0,234,255,.35);
+  outline:1px solid rgba(60,90,255,.25);
+  outline-offset:10px;
+  box-shadow:
+    0 0 35px rgba(0,100,255,.12),
+    inset 0 0 100px rgba(0,70,255,.08);
+  pointer-events:none;
+  transform:perspective(900px) rotateX(2deg);
+}
+
+.hero-frame::before,
+.hero-frame::after {
+  content:"";
+  position:absolute;
+  width:55px;
+  height:55px;
+  border:2px solid var(--cyan);
+  filter:drop-shadow(0 0 8px var(--cyan));
+}
+
+.hero-frame::before {
+  top:-2px;
+  left:-2px;
+  border-right:0;
+  border-bottom:0;
+}
+
+.hero-frame::after {
+  right:-2px;
+  bottom:-2px;
+  border-left:0;
+  border-top:0;
+}
+
+.hero-content {
+  position:relative;
+  z-index:3;
+  width:100%;
+  max-width:1100px;
+}
+
+/* HERO BACKGROUND IMAGE */
+
+.hero-image {
+  position:absolute;
+  z-index:-1;
+  width:min(1000px,90vw);
+  height:min(577px,65vh);
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  object-fit:contain;
+  opacity:.38;
+  filter:
+    drop-shadow(0 0 25px rgba(0,180,255,.65))
+    drop-shadow(0 0 65px rgba(20,80,255,.5));
+  pointer-events:none;
+  user-select:none;
+  animation:heroImagePulse 5s ease-in-out infinite;
+}
+
+.hero-image::selection { background:transparent; }
+
+@keyframes heroImagePulse {
+  0%,100% {
+    opacity:.32;
+    filter:drop-shadow(0 0 20px rgba(0,180,255,.5));
+  }
+  50% {
+    opacity:.48;
+    filter:
+      drop-shadow(0 0 35px rgba(0,234,255,.85))
+      drop-shadow(0 0 85px rgba(20,80,255,.7));
+  }
+}
+
+.eyebrow {
+  color:var(--cyan);
+  font-family:Orbitron,sans-serif;
+  letter-spacing:6px;
+  font-size:11px;
+  margin-bottom:30px;
+  text-shadow:0 0 15px var(--cyan);
+}
+
+.hero-title {
+  position:relative;
+  font-size:clamp(35px,7vw,88px);
+  line-height:1.4;
+  font-weight:900;
+  letter-spacing:.04em;
+  margin:0 auto;
+  text-shadow:
+    0 0 10px rgba(0,234,255,.8),
+    0 0 30px rgba(0,100,255,.7),
+    0 0 70px rgba(100,40,255,.4);
+  animation:titleAppear 1s ease both;
+}
+
+@keyframes titleAppear {
+  0% {
+    opacity:0;
+    transform:translateY(25px) scale(.95);
+    filter:blur(12px);
+  }
+  100% {
+    opacity:1;
+    transform:translateY(0) scale(1);
+    filter:blur(0);
+  }
+}
+
+.hero-sub {
+  margin:25px 0 38px;
+  color:#91b5d9;
+  font-size:11px;
+  letter-spacing:5px;
+}
+
+.hero-actions {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:16px;
+}
+
+/* BUTTONS */
+
+.neon-button {
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:200px;
+  padding:17px 25px;
+  border:1px solid var(--cyan);
+  background:rgba(0,80,180,.16);
+  color:var(--cyan);
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  letter-spacing:2px;
+  transition:.25s;
+  overflow:hidden;
+  clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
+}
+
+.neon-button::before {
+  content:"";
+  position:absolute;
+  top:0;
+  left:-120%;
+  width:70%;
+  height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);
+  transform:skewX(-20deg);
+  transition:.5s;
+}
+
+.neon-button:hover::before {
+  left:150%;
+}
+
+.neon-button:hover {
+  background:var(--cyan);
+  color:#00101b;
+  box-shadow:0 0 20px var(--cyan),0 0 55px rgba(0,100,255,.5);
+  transform:translateY(-3px);
+}
+
+.neon-button.secondary {
+  border-color:var(--pink);
+  color:#ff8bff;
+  background:rgba(120,0,180,.12);
+}
+
+.neon-button.secondary:hover {
+  background:var(--pink);
+  color:#18001c;
+  box-shadow:0 0 25px var(--pink),0 0 60px rgba(180,0,255,.3);
+}
+
+.hero-bottom {
+  position:absolute;
+  bottom:25px;
+  left:0;
+  right:0;
+  color:#657b9e;
+  font:10px Orbitron,sans-serif;
+  letter-spacing:4px;
+  z-index:3;
+}
+
+.scroll-line {
+  width:2px;
+  height:42px;
+  margin:13px auto 0;
+  background:linear-gradient(var(--cyan),transparent);
+  box-shadow:0 0 10px var(--cyan);
+  animation:scrollPulse 1.4s infinite;
+}
+
+@keyframes scrollPulse {
+  50% { opacity:.2;transform:scaleY(.6); }
+}
+
+/* ELECTRIC FLASH */
+
+.lightning {
+  position:fixed;
+  inset:0;
+  z-index:90;
+  pointer-events:none;
+  opacity:0;
+  background:white;
+}
+
+.lightning.flash {
+  animation:flash .7s ease-out;
+}
+
+@keyframes flash {
+  0% { opacity:0; }
+  6% { opacity:.95; }
+  11% { opacity:0; }
+  20% { opacity:.55; }
+  26% { opacity:0; }
+  100% { opacity:0; }
+}
+
+.lightning-svg {
+  position:absolute;
+  width:100%;
+  height:100%;
+  inset:0;
+  opacity:0;
+  filter:drop-shadow(0 0 15px white) drop-shadow(0 0 35px var(--cyan));
+}
+
+.flash .lightning-svg { opacity:1; }
+
+/* FULL SCREEN ENERGY BURST */
+
+.energy-burst {
+  position:fixed;
+  inset:0;
+  z-index:89;
+  pointer-events:none;
+  opacity:0;
+  background:
+    radial-gradient(circle at center,rgba(255,255,255,.9),rgba(0,234,255,.45) 15%,rgba(20,50,255,.3) 35%,transparent 75%);
+}
+
+.energy-burst.active {
+  animation:energyBurst .9s ease-out;
+}
+
+@keyframes energyBurst {
+  0% { opacity:0;transform:scale(.7); }
+  15% { opacity:1; }
+  45% { opacity:.25;transform:scale(1.15); }
+  100% { opacity:0;transform:scale(1.5); }
+}
+
+/* SECTION */
+
+section.content-section {
+  position:relative;
+  padding:120px 7%;
+  max-width:1500px;
+  margin:auto;
+}
+
+.section-head {
+  margin-bottom:50px;
+}
+
+.section-index {
+  color:var(--cyan);
+  font:11px Orbitron,sans-serif;
+  letter-spacing:4px;
+  margin-bottom:14px;
+  text-shadow:0 0 12px var(--cyan);
+}
+
+.section-title {
+  font:800 clamp(32px,5vw,55px) Orbitron,sans-serif;
+  letter-spacing:3px;
+  margin:0;
+  text-shadow:0 0 25px rgba(0,100,255,.3);
+}
+
+.section-title span {
+  color:var(--cyan);
+}
+
+.section-desc {
+  color:var(--muted);
+  font-size:13px;
+  margin-top:15px;
+  line-height:2;
+}
+
+/* SECTION LIGHT BAR */
+
+.section-divider {
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin:0 auto 38px;
+  max-width:600px;
+  color:var(--cyan);
+  font:10px Orbitron,sans-serif;
+  letter-spacing:4px;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content:"";
+  flex:1;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan));
+  box-shadow:0 0 8px var(--cyan);
+}
+
+.section-divider::after {
+  background:linear-gradient(90deg,var(--cyan),transparent);
+}
+
+/* PANELS */
+
+.panel {
+  background:
+    linear-gradient(135deg,rgba(0,100,255,.12),transparent 50%),
+    rgba(7,13,32,.92);
+  border:1px solid rgba(0,234,255,.25);
+  box-shadow:
+    0 0 35px rgba(0,0,0,.35),
+    inset 0 0 35px rgba(0,100,255,.035);
+  position:relative;
+  overflow:hidden;
+}
+
+.panel::before {
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:90px;
+  height:2px;
+  background:var(--cyan);
+  box-shadow:0 0 15px var(--cyan);
+}
+
+.panel::after {
+  content:"";
+  position:absolute;
+  bottom:0;
+  right:0;
+  width:90px;
+  height:2px;
+  background:var(--purple);
+  box-shadow:0 0 15px var(--purple);
+}
+
+/* ORIGINAL */
+
+.original-layout {
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:35px;
+  align-items:center;
+}
+
+.video-frame {
+  aspect-ratio:9/16;
+  max-height:570px;
+  margin:auto;
+  width:100%;
+  max-width:330px;
+  border:1px solid var(--cyan);
+  outline:1px solid rgba(100,60,255,.5);
+  outline-offset:5px;
+  box-shadow:0 0 30px rgba(0,234,255,.2),0 0 70px rgba(40,60,255,.12);
+  background:#000;
+  position:relative;
+}
+
+.video-frame iframe {
+  width:100%;
+  height:100%;
+  border:0;
+}
+
+.video-fallback {
+  display:none;
+  position:absolute;
+  inset:0;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:18px;
+  padding:25px;
+  text-align:center;
+  background:
+    radial-gradient(circle,rgba(0,100,255,.25),transparent 65%),
+    #030611;
+}
+
+.video-fallback p {
+  color:var(--muted);
+  font-size:12px;
+  line-height:2;
+}
+
+/* MUSIC PLAYER */
+
+.music-layout {
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:35px;
+  padding:35px;
+}
+
+.album {
+  aspect-ratio:1;
+  position:relative;
+  border-radius:50%;
+  background:
+    radial-gradient(circle,#030611 0 8%,transparent 9%),
+    repeating-radial-gradient(circle,#182b4c 0 2px,#080e1e 3px 6px);
+  border:5px solid #263e66;
+  box-shadow:
+    0 0 30px rgba(0,234,255,.25),
+    inset 0 0 30px #020611;
+  overflow:hidden;
+}
+
+.album::before {
+  content:"ANALIDO";
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  font:900 25px Orbitron,sans-serif;
+  letter-spacing:3px;
+  color:var(--cyan);
+  text-shadow:0 0 20px var(--cyan);
+}
+
+.album::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:conic-gradient(transparent 0deg,rgba(0,234,255,.35) 50deg,transparent 100deg);
+  animation:albumShine 4s linear infinite;
+}
+
+@keyframes albumShine {
+  to { transform:rotate(360deg); }
+}
+
+.album.playing {
+  animation:spin 7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform:rotate(360deg); }
+}
+
+.music-meta { margin:22px 0 25px; }
+
+.music-meta h3 {
+  font-size:23px;
+  margin:0 0 8px;
+}
+
+.music-meta p {
+  color:var(--muted);
+  font-size:12px;
+  margin:0;
+}
+
+.track-state {
+  color:var(--cyan);
+  font:10px Orbitron,sans-serif;
+  letter-spacing:2px;
+  margin-bottom:12px;
+}
+
+.progress {
+  width:100%;
+  height:5px;
+  background:#17233c;
+  margin:20px 0 8px;
+  cursor:pointer;
+  position:relative;
+}
+
+.progress-fill {
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+  box-shadow:0 0 10px var(--cyan);
+}
+
+.time-row {
+  display:flex;
+  justify-content:space-between;
+  color:#7789a9;
+  font:10px Orbitron,sans-serif;
+}
+
+.player-controls {
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin:25px 0;
+}
+
+.control {
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:1px solid rgba(0,234,255,.5);
+  background:rgba(0,100,255,.12);
+  color:var(--cyan);
+  cursor:pointer;
+  transition:.2s;
+  font-size:15px;
+}
+
+.control.main {
+  width:58px;
+  height:58px;
+  background:linear-gradient(145deg,#00dfff,#176aff);
+  color:#00101c;
+  font-size:20px;
+  box-shadow:0 0 25px rgba(0,234,255,.4);
+}
+
+.control:hover {
+  transform:scale(1.1);
+  box-shadow:0 0 15px var(--cyan);
+}
+
+.control:disabled {
+  opacity:.25;
+  cursor:not-allowed;
+  transform:none;
+  box-shadow:none;
+}
+
+.volume-row {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+input[type=range] {
+  accent-color:var(--cyan);
+  width:130px;
+}
+
+/* CURRENT TRACK LINK */
+
+.track-link {
+  margin-top:15px;
+  min-width:0;
+  width:100%;
+  padding:13px 18px;
+  font-size:10px;
+}
+
+.track-link.disabled {
+  opacity:.3;
+  pointer-events:none;
+  filter:grayscale(1);
+}
+
+.queue {
+  border-left:1px solid var(--line);
+  padding-left:30px;
+}
+
+.queue h4 {
+  font:11px Orbitron,sans-serif;
+  color:var(--cyan);
+  letter-spacing:3px;
+  margin-top:0;
+}
+
+.queue-list {
+  display:grid;
+  gap:10px;
+}
+
+.queue-item {
+  display:flex;
+  gap:14px;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.02);
+  font-size:12px;
+  color:#8d9bb4;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.queue-item:hover {
+  border-color:var(--cyan);
+  background:rgba(0,234,255,.06);
+}
+
+.queue-item.active {
+  border-color:rgba(0,234,255,.5);
+  color:var(--cyan);
+  background:rgba(0,234,255,.07);
+}
+
+.queue-number {
+  font:12px Orbitron,sans-serif;
+  color:var(--pink);
+  flex-shrink:0;
+}
+
+/* MAD ARCHIVE */
+
+.mad-archive-link {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:25px;
+  padding:38px 42px;
+  min-height:180px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(0,234,255,.35);
+  background:
+    linear-gradient(110deg,rgba(0,100,255,.25),rgba(7,13,32,.96) 65%),
+    #080e20;
+  box-shadow:0 0 35px rgba(0,100,255,.12);
+  transition:.3s;
+}
+
+.mad-archive-link::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(110deg,transparent 20%,rgba(0,234,255,.12),transparent 75%);
+  transform:translateX(-100%);
+  transition:.7s;
+}
+
+.mad-archive-link:hover::before {
+  transform:translateX(100%);
+}
+
+.mad-archive-link:hover {
+  border-color:var(--cyan);
+  box-shadow:0 0 30px rgba(0,234,255,.25),0 0 70px rgba(0,80,255,.15);
+  transform:translateY(-5px);
+}
+
+.mad-archive-text {
+  position:relative;
+  z-index:1;
+}
+
+.mad-archive-text small {
+  color:var(--cyan);
+  font:11px Orbitron,sans-serif;
+  letter-spacing:3px;
+}
+
+.mad-archive-text h3 {
+  font-size:clamp(24px,4vw,38px);
+  margin:15px 0 8px;
+}
+
+.mad-archive-text p {
+  color:var(--muted);
+  font-size:12px;
+  line-height:2;
+  margin:0;
+}
+
+.mad-archive-arrow {
+  position:relative;
+  z-index:1;
+  font:42px Orbitron,sans-serif;
+  color:var(--cyan);
+  text-shadow:0 0 20px var(--cyan);
+  transition:.3s;
+}
+
+.mad-archive-link:hover .mad-archive-arrow {
+  transform:translate(8px,-5px);
+}
+
+/* ABOUT */
+
+.about-panel {
+  padding:35px;
+}
+
+.about-panel h3 {
+  font-family:Orbitron,sans-serif;
+  color:var(--cyan);
+  letter-spacing:3px;
+}
+
+.about-panel p {
+  color:var(--muted);
+  font-size:13px;
+  line-height:2.4;
+}
+
+/* FOOTER */
+
+footer {
+  text-align:center;
+  padding:75px 20px;
+  border-top:1px solid var(--line);
+  background:
+    linear-gradient(transparent,rgba(0,50,130,.1)),
+    #030611;
+}
+
+.footer-logo {
+  font:900 32px Orbitron,sans-serif;
+  letter-spacing:8px;
+  text-shadow:0 0 20px var(--cyan);
+}
+
+footer p {
+  color:#58657c;
+  font-size:10px;
+  letter-spacing:2px;
+  line-height:2.5;
+}
+
+/* REVEAL */
+
+.reveal {
+  opacity:0;
+  transform:translateY(35px);
+  transition:opacity .8s ease,transform .8s ease;
+}
+
+.reveal.visible {
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* SCROLL PROGRESS */
+
+#scrollProgress {
+  position:fixed;
+  top:0;
+  left:0;
+  height:2px;
+  width:0%;
+  background:linear-gradient(90deg,var(--blue),var(--cyan),var(--pink));
+  box-shadow:0 0 12px var(--cyan);
+  z-index:110;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:850px) {
+  .nav { padding:0 5%; }
+  .nav-links { gap:13px; }
+  .nav-links a { font-size:8px; }
+
+  .original-layout,
+  .music-layout {
+    grid-template-columns:1fr;
+  }
+
+  .music-layout { padding:22px; }
+
+  .album {
+    width:220px;
+    margin:auto;
+  }
+
+  .queue {
+    border-left:0;
+    border-top:1px solid var(--line);
+    padding:25px 0 0;
+  }
+}
+
+@media(max-width:520px) {
+  .nav { height:64px; }
+  .logo { font-size:18px; }
+  .nav-links { gap:12px; }
+  .nav-links a { font-size:8px;letter-spacing:.5px; }
+  .hero { padding-top:100px; }
+  .hero-frame { height:490px; }
+  .eyebrow { font-size:8px;letter-spacing:3px; }
+  .hero-title { font-size:35px; }
+  .hero-sub { font-size:8px;letter-spacing:2px; }
+  section.content-section { padding:85px 6%; }
+  .original-info { padding:25px; }
+  .player-controls { gap:12px; }
+  .mad-archive-link { padding:28px 23px; }
+  .mad-archive-arrow { font-size:30px; }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    scroll-behavior:auto !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="scrollProgress"></div>
+
+<canvas id="stars"></canvas>
+
+<div class="ambient a"></div>
+<div class="ambient b"></div>
+
+<div class="light-streak s1"></div>
+<div class="light-streak s2"></div>
+<div class="light-streak s3"></div>
+
+<div class="mouse-glow" id="mouseGlow"></div>
+
+<div class="lightning" id="lightning">
+  <svg class="lightning-svg" viewBox="0 0 1000 700" preserveAspectRatio="none">
+    <path d="M500 0 L450 160 L520 145 L390 360 L470 330 L350 570"
+      stroke="white" stroke-width="6" fill="none"/>
+    <path d="M450 160 L300 260 L390 360"
+      stroke="#00eaff" stroke-width="4" fill="none"/>
+    <path d="M520 145 L680 270 L470 330"
+      stroke="#8b4dff" stroke-width="4" fill="none"/>
+  </svg>
+</div>
+
+<div class="energy-burst" id="energyBurst"></div>
+
+<header class="nav">
+  <a href="#" class="logo">ANA<span>L</span>IDO</a>
+
+  <nav class="nav-links">
+    <a href="#original">ORIGINAL</a>
+    <a href="#music">MUSIC</a>
+    <a href="#archive">MAD ARCHIVE</a>
+    <a href="#about">ABOUT</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- HERO -->
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-frame"></div>
+
+  <div class="hero-content">
+    <img class="hero-image" src="big.png" alt="" aria-hidden="true">
+
+    <div class="eyebrow">WELCOME TO THE ANALIDO UNIVERSE</div>
+
+    <h1 class="hero-title" id="heroTitle">
+      新曲、アナル移動
+    </h1>
+
+    <p class="hero-sub" id="heroSub">
+      THE DIGITAL ARCHIVE OF ANALIDO
+    </p>
+
+    <div class="hero-actions">
+      <button class="neon-button" id="playVoiceButton" onclick="playHeroVoice()">
+        ▶ PLAY VOICE
+      </button>
+
+      <a class="neon-button secondary" href="#original">
+        ENTER THE ARCHIVE
+      </a>
+    </div>
+
+    <audio id="heroVoice" preload="auto"></audio>
+  </div>
+
+  <div class="hero-bottom">
+    SCROLL TO EXPLORE
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ORIGINAL -->
+
+<section class="content-section" id="original">
+  <div class="section-head reveal">
+    <div class="section-index">01 // SOURCE MATERIAL</div>
+    <h2 class="section-title">THE <span>ORIGINAL</span></h2>
+    <p class="section-desc">
+      すべての始まり。原点となるオリジナルコンテンツ。
+    </p>
+  </div>
+
+  <div class="section-divider">ORIGINAL SOURCE</div>
+
+  <div class="original-layout reveal">
+    <div class="video-frame">
+      <iframe
+        id="originalVideo"
+        src="https://www.youtube-nocookie.com/embed/tMODf8JSAbU?rel=0&playsinline=1"
+        title="新曲 アナル移動"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+      </iframe>
+
+      <div class="video-fallback" id="videoFallback">
+        <p>
+          埋め込みプレイヤーを表示できません。<br>
+          YouTube側の制限により再生できない場合があります。
+        </p>
+        <a class="neon-button" href="https://youtube.com/shorts/tMODf8JSAbU"
+           target="_blank" rel="noopener">
+          WATCH ON YOUTUBE ↗
+        </a>
+      </div>
+    </div>
+
+    <div class="panel original-info">
+      <span class="tag">ORIGINAL VIDEO</span>
+      <h3>新曲「アナル移動」<br>【アポーTV・芸人アポー】</h3>
+      <p>
+        ANALIDOの原点となる映像作品。
+        ここからすべてが始まった。
+      </p>
+      <p>
+        ORIGINAL SOURCE<br>
+        YouTube Shorts
+      </p>
+      <a class="neon-button"
+         href="https://youtube.com/shorts/tMODf8JSAbU"
+         target="_blank" rel="noopener">
+        WATCH ORIGINAL ↗
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- MUSIC -->
+
+<section class="content-section" id="music">
+  <div class="section-head reveal">
+    <div class="section-index">02 // AUDIO SYSTEM</div>
+    <h2 class="section-title">ANALIDO <span>MUSIC</span></h2>
+    <p class="section-desc">
+      音楽を再生する。ANALIDO専用ミュージックプレイヤー。
+    </p>
+  </div>
+
+  <div class="section-divider">SOUND CONTROL</div>
+
+  <div class="panel music-layout reveal">
+
+    <div>
+      <div class="album" id="album"></div>
+
+      <div class="music-meta">
+        <div class="track-state" id="trackState">SYSTEM STANDBY</div>
+        <h3 id="trackTitle">ANALIDO MUSIC</h3>
+        <p id="trackArtist">SoundCloud Playlist</p>
+      </div>
+
+      <div class="progress" id="progress">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="time-row">
+        <span id="currentTime">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+
+      <div class="player-controls">
+        <button class="control" id="shuffleBtn" title="シャッフル">⤨</button>
+        <button class="control" id="prevBtn" title="前の曲">|◀</button>
+        <button class="control main" id="playBtn" title="再生">▶</button>
+        <button class="control" id="nextBtn" title="次の曲">▶|</button>
+      </div>
+
+      <div class="volume-row">
+        <span>VOLUME</span>
+        <input type="range" id="volume" min="0" max="100" value="70">
+        <span id="volumeValue">70%</span>
+      </div>
+
+      <a
+        class="neon-button track-link disabled"
+        id="currentTrackLink"
+        href="#"
+        target="_blank"
+        rel="noopener"
+        aria-disabled="true"
+        tabindex="-1">
+        OPEN CURRENT TRACK ↗
+      </a>
+
+      <p id="musicStatus" class="section-desc">
+        PLAYLIST URL NOT SET
+      </p>
+    </div>
+
+    <div class="queue">
+      <h4>PLAY QUEUE // TRACK LIST</h4>
+      <div class="queue-list" id="queueList">
+        <div class="queue-item">
+          <span class="queue-number">--</span>
+          <span>SoundCloudプレイリスト未設定</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div
+    id="soundcloudHost"
+    style="position:fixed;left:-9999px;top:0;width:500px;height:600px;overflow:hidden;pointer-events:none;">
+
+    <iframe id="soundcloudFrame"
+      width="500"
+      height="300"
+      scrolling="no"
+      frameborder="no"
+      allow="autoplay"
+      allowfullscreen>
+    </iframe>
+
+    <iframe id="soundcloudScannerFrame"
+      width="500"
+      height="300"
+      scrolling="no"
+      frameborder="no"
+      allow="autoplay"
+      allowfullscreen>
+    </iframe>
+  </div>
+</section>
+
+<!-- MAD ARCHIVE -->
+
+<section class="content-section" id="archive">
+  <div class="section-head reveal">
+    <div class="section-index">03 // MAD COLLECTION</div>
+    <h2 class="section-title">MAD <span>ARCHIVE</span></h2>
+    <p class="section-desc">
+      アナル移動関連のMAD集。
+    </p>
+  </div>
+
+  <div class="section-divider">MAD COLLECTION</div>
+
+  <a class="mad-archive-link reveal"
+     href="https://soundcloud.com/search?q=%E3%82%A2%E3%83%8A%E3%83%AB%E7%A7%BB%E5%8B%95"
+     target="_blank"
+     rel="noopener">
+    <div class="mad-archive-text">
+      <small>ANALIDO // MAD COLLECTION</small>
+      <h3>アナル移動 MAD集</h3>
+      <p>
+        SoundCloudでMAD作品をチェックする。<br>
+        外部ページへ移動します。
+      </p>
+    </div>
+    <div class="mad-archive-arrow">↗</div>
+  </a>
+</section>
+
+<!-- ABOUT -->
+
+<section class="content-section" id="about">
+  <div class="section-head reveal">
+    <div class="section-index">04 // INFORMATION</div>
+    <h2 class="section-title">ABOUT <span>ANALIDO</span></h2>
+  </div>
+
+  <div class="panel about-panel reveal">
+    <h3>THIS IS ANALIDO.</h3>
+    <p>
+      ANALIDOは「アナル移動」に関連するコンテンツを集めた
+      非公式ファンアーカイブサイトです。<br>
+      本サイトは原作者・関係者とは無関係のファン制作プロジェクトです。<br>
+      掲載コンテンツの権利は各権利者に帰属します。
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-logo">ANALIDO</div>
+  <p>
+    DIGITAL ARCHIVE PROJECT<br>
+    UNOFFICIAL FAN-MADE WEBSITE<br>
+    © ANALIDO PROJECT
+  </p>
+</footer>
+
+<script src="https://w.soundcloud.com/player/api.js"></script>
+
+<script>
+/* =========================================
+   RANDOM HERO TITLE + VOICE
+========================================= */
+
+const heroLines = [
+  "トイレに行ったら誰かが入っていて、クソを放てない状態",
+  "新曲、アナル移動",
+  "ちょい移動で漏れとるよ"
+];
+
+const heroSubtitles = [
+  "TOILET ACCESS DENIED",
+  "THE LEGENDARY MOVEMENT",
+  "EMERGENCY RELOCATION"
+];
+
+const voiceFiles = [
+  "voice_move.mp3",
+  "voice_newsong.mp3",
+  "voice_hanatenai.mp3"
+];
+
+const heroTitle = document.getElementById("heroTitle");
+const heroSub = document.getElementById("heroSub");
+const voice = document.getElementById("heroVoice");
+const playVoiceButton = document.getElementById("playVoiceButton");
+
+const selectedLine = Math.floor(Math.random() * heroLines.length);
+
+heroTitle.textContent = heroLines[selectedLine];
+heroSub.textContent = heroSubtitles[selectedLine];
+
+voice.src = voiceFiles[selectedLine];
+
+let voiceAutoplayBlocked = false;
+
+async function playHeroVoice() {
+  try {
+    voice.currentTime = 0;
+    await voice.play();
+
+    voiceAutoplayBlocked = false;
+    playVoiceButton.classList.remove("autoplay-blocked");
+    playVoiceButton.title = "音声を再生中";
+  } catch (error) {
+    voiceAutoplayBlocked = true;
+    playVoiceButton.classList.add("autoplay-blocked");
+    playVoiceButton.title = "自動再生がブロックされました。クリックして再生";
+    console.warn("音声の自動再生が拒否されました:", error);
+  }
+}
+
+/*
+  ページアクセス時に音声付き自動再生を試みる。
+  ブラウザが拒否した場合は、最初のユーザー操作時にも再試行する。
+*/
+window.addEventListener("load", () => {
+  playHeroVoice();
+});
+
+function retryHeroVoiceAfterGesture() {
+  if (voiceAutoplayBlocked && voice.paused) {
+    voice.play().then(() => {
+      voiceAutoplayBlocked = false;
+      playVoiceButton.classList.remove("autoplay-blocked");
+    }).catch(error => {
+      console.warn("ユーザー操作後の音声再生にも失敗しました:", error);
+    });
+  }
+}
+
+window.addEventListener("pointerdown", retryHeroVoiceAfterGesture, { once:true });
+window.addEventListener("keydown", retryHeroVoiceAfterGesture, { once:true });
+
+/* =========================================
+   LIGHTNING OPENING
+========================================= */
+
+const lightning = document.getElementById("lightning");
+const energyBurst = document.getElementById("energyBurst");
+
+function lightningFlash() {
+  lightning.classList.remove("flash");
+  void lightning.offsetWidth;
+  lightning.classList.add("flash");
+}
+
+function energyFlash() {
+  energyBurst.classList.remove("active");
+  void energyBurst.offsetWidth;
+  energyBurst.classList.add("active");
+}
+
+window.addEventListener("load", () => {
+  setTimeout(lightningFlash,300);
+  setTimeout(energyFlash,650);
+  setTimeout(lightningFlash,1050);
+});
+
+/* =========================================
+   STAR PARTICLES
+========================================= */
+
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+let stars = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth * devicePixelRatio;
+  canvas.height = window.innerHeight * devicePixelRatio;
+
+  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+
+  stars = Array.from({length:140}, () => ({
+    x:Math.random()*window.innerWidth,
+    y:Math.random()*window.innerHeight,
+    size:Math.random()*1.7,
+    speed:Math.random()*.35+.05,
+    alpha:Math.random()
+  }));
+}
+
+function drawStars() {
+  ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+  for (const s of stars) {
+    s.y -= s.speed;
+
+    if (s.y < 0) {
+      s.y = window.innerHeight;
+      s.x = Math.random()*window.innerWidth;
+    }
+
+    s.alpha += (Math.random()-.5)*.04;
+    s.alpha = Math.max(.15,Math.min(1,s.alpha));
+
+    ctx.fillStyle = `rgba(120,220,255,${s.alpha})`;
+    ctx.fillRect(s.x,s.y,s.size,s.size);
+  }
+
+  requestAnimationFrame(drawStars);
+}
+
+window.addEventListener("resize",resizeCanvas);
+resizeCanvas();
+drawStars();
+
+/* =========================================
+   MOUSE GLOW
+========================================= */
+
+const mouseGlow = document.getElementById("mouseGlow");
+
+window.addEventListener("pointermove",e => {
+  mouseGlow.style.left = e.clientX+"px";
+  mouseGlow.style.top = e.clientY+"px";
+});
+
+/* =========================================
+   SCROLL PROGRESS
+========================================= */
+
+const scrollProgress = document.getElementById("scrollProgress");
+
+window.addEventListener("scroll",() => {
+  const scrollable =
+    document.documentElement.scrollHeight - window.innerHeight;
+
+  const percent = scrollable > 0
+    ? window.scrollY / scrollable * 100
+    : 0;
+
+  scrollProgress.style.width = percent+"%";
+},{passive:true});
+
+/* =========================================
+   SCROLL REVEAL
+========================================= */
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+    }
+  });
+},{threshold:.12});
+
+document.querySelectorAll(".reveal").forEach(el => {
+  observer.observe(el);
+});
+
+/* =========================================
+   SOUNDCLOUD CUSTOM PLAYER
+========================================= */
+
+/*
+  公開SoundCloudプレイリストのURL。
+*/
+
+const PLAYLIST_URL = "https://soundcloud.com/bbp6rydls7pe/sets/if0eqjbaxw6v?si=3476936cca8145f29b3f37c721c9822e&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing";
+
+/*
+  プレイリストに表示する正式なトラックリスト。
+  29曲目は表示・再生対象から除外する。
+*/
+
+const TRACK_TITLES = [
+  "新曲アナルHoldin' On移動 (Reflip VIP)",
+  "新曲「多重加速アナル移動」",
+  "アナル移動 Evans",
+  "アナル移動 目覚ましアラ－ム",
+  "新曲「爆速アナル瞬間移動」",
+  "Signalとアナル移動のマッシュアップ",
+  "新曲「アナル移動 (feat. Delay Lama)」",
+  "あーぱつあぱつ x アナル移動 [新曲 ANL.]",
+  "サラマンダー (Keton Flip)とアナル移動のマッシュアップ",
+  "Get Wrecked アナル移動 tools",
+  "All I Want For Christmas Is アナル",
+  "アナル移動 VocalSynth",
+  "新曲「Aanal」",
+  "新曲「ｧアナルｨ移動ｫ…」",
+  "新曲「Driftanal City」",
+  "アナル移動 (Spliceバージョン)",
+  "新曲「ANALOVANIA」",
+  "bass 2 bassアナル移動",
+  "Temu製アナル移動爆発",
+  "新曲SPEEDANAL BABE移動",
+  "MONTAGEM ANAL IDO",
+  "俺が歌うアナル移動",
+  "FREE SHIBAKUDE COIN 💰💰 Use promo code: FUVONXHQR to claim your bonus now! 🏃‍♀️💨",
+  "アナル移動",
+  "新曲オートチューン移動",
+  "新曲「ウ山移動」",
+  "新曲メタル移動",
+  "新曲THE SAME ANAL"
+];
+
+const TRACK_COUNT = TRACK_TITLES.length;
+
+const frame = document.getElementById("soundcloudFrame");
+const scannerFrame = document.getElementById("soundcloudScannerFrame");
+
+const playBtn = document.getElementById("playBtn");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const shuffleBtn = document.getElementById("shuffleBtn");
+const album = document.getElementById("album");
+
+const trackTitle = document.getElementById("trackTitle");
+const trackArtist = document.getElementById("trackArtist");
+const trackState = document.getElementById("trackState");
+const musicStatus = document.getElementById("musicStatus");
+const queueList = document.getElementById("queueList");
+
+const progress = document.getElementById("progress");
+const progressFill = document.getElementById("progressFill");
+const currentTime = document.getElementById("currentTime");
+const duration = document.getElementById("duration");
+
+const volume = document.getElementById("volume");
+const volumeValue = document.getElementById("volumeValue");
+const currentTrackLink = document.getElementById("currentTrackLink");
+
+let widget = null;
+let scannerWidget = null;
+
+let sounds = [];
+let currentIndex = 0;
+let isPlaying = false;
+let shuffleEnabled = false;
+let shuffleQueue = [];
+let durationMs = 0;
+
+let autoPlayStarted = false;
+let autoPlayTimer = null;
+let fadeTimer = null;
+let scanStarted = false;
+let scanFinished = false;
+let userEnabledAudio = false;
+let currentTrackUrl = "";
+
+let shufflePosition = 0;
+let autoFadePending = false;
+let autoFadeTarget = 70;
+
+const AUTO_PLAY_DELAY = 5000;
+const FADE_DURATION = 5000;
+const FADE_INTERVAL = 100;
+
+function formatTime(ms) {
+  const seconds = Math.floor((ms || 0) / 1000);
+
+  return Math.floor(seconds/60) + ":" +
+    String(seconds%60).padStart(2,"0");
+}
+
+function updatePlayState(playing) {
+  isPlaying = playing;
+
+  playBtn.textContent = playing ? "Ⅱ" : "▶";
+
+  trackState.textContent = playing
+    ? "NOW PLAYING"
+    : "PAUSED";
+
+  album.classList.toggle("playing",playing);
+}
+
+function setCurrentTrackLink(url) {
+  if (url && /^https:\/\/soundcloud\.com\//i.test(url)) {
+    currentTrackUrl = url;
+    currentTrackLink.href = url;
+    currentTrackLink.classList.remove("disabled");
+    currentTrackLink.setAttribute("aria-disabled","false");
+    currentTrackLink.removeAttribute("tabindex");
+  } else {
+    currentTrackUrl = "";
+    currentTrackLink.href = "#";
+    currentTrackLink.classList.add("disabled");
+    currentTrackLink.setAttribute("aria-disabled","true");
+    currentTrackLink.setAttribute("tabindex","-1");
+  }
+}
+
+function updateTrack(sound) {
+  if (!sound) return;
+
+  const actualIndex = sounds.findIndex(s => s && sound.id && s.id === sound.id);
+
+  if (actualIndex >= 0) {
+    currentIndex = actualIndex;
+
+    sounds[actualIndex] = {
+      ...sounds[actualIndex],
+      ...sound,
+      title:TRACK_TITLES[actualIndex]
+    };
+  }
+
+  trackTitle.textContent =
+    TRACK_TITLES[currentIndex] || sound.title || "ANALIDO MUSIC";
+
+  trackArtist.textContent =
+    (sound.user && sound.user.username) || "SoundCloud";
+
+  durationMs = sound.duration || 0;
+
+  duration.textContent = formatTime(durationMs);
+
+  setCurrentTrackLink(sound.permalink_url);
+
+  renderQueue();
+}
+
+function renderQueue() {
+  if (!sounds.length) return;
+
+  queueList.innerHTML = "";
+
+  TRACK_TITLES.forEach((title,index) => {
+    if (index >= TRACK_COUNT || index >= sounds.length) return;
+
+    const item = document.createElement("div");
+
+    item.className = "queue-item" +
+      (index === currentIndex ? " active" : "");
+
+    const number = document.createElement("span");
+    number.className = "queue-number";
+    number.textContent = String(index+1).padStart(2,"0");
+
+    const titleElement = document.createElement("span");
+    titleElement.textContent = title;
+
+    item.append(number,titleElement);
+
+item.addEventListener("click",() => {
+  if (!widget) return;
+
+  playTrackAtIndex(index);
+});
+
+    queueList.appendChild(item);
+  });
+}
+
+function buildShuffleQueue(keepCurrent = false) {
+  const count = Math.min(sounds.length,TRACK_COUNT);
+
+  shuffleQueue = Array.from(
+    {length:count},
+    (_,i)=>i
+  );
+
+  // Fisher-Yatesシャッフル
+  for (let i=shuffleQueue.length-1;i>0;i--) {
+    const j = Math.floor(Math.random()*(i+1));
+
+    [shuffleQueue[i],shuffleQueue[j]] =
+      [shuffleQueue[j],shuffleQueue[i]];
+  }
+
+  /*
+    手動でシャッフルを有効にした場合だけ、
+    現在の曲を先頭にする。
+    自動再生開始時はランダムな曲から始める。
+  */
+
+  if (keepCurrent) {
+    const currentPosition = shuffleQueue.indexOf(currentIndex);
+
+    if (currentPosition > 0) {
+      [shuffleQueue[0],shuffleQueue[currentPosition]] =
+        [shuffleQueue[currentPosition],shuffleQueue[0]];
+    }
+  }
+
+  shufflePosition = 0;
+
+  if (!keepCurrent && shuffleQueue.length > 1) {
+    // 前回と同じ曲から始まるのを避ける
+    if (shuffleQueue[0] === currentIndex) {
+      [shuffleQueue[0],shuffleQueue[1]] =
+        [shuffleQueue[1],shuffleQueue[0]];
+    }
+  }
+}
+
+function playTrackAtIndex(index) {
+  if (!widget || !sounds.length) return;
+
+  const maxTracks = Math.min(sounds.length,TRACK_COUNT);
+
+  if (index < 0 || index >= maxTracks) return;
+
+  currentIndex = index;
+
+  if (shuffleEnabled) {
+    const position = shuffleQueue.indexOf(index);
+
+    if (position >= 0) {
+      shufflePosition = position;
+    }
+  }
+
+  widget.skip(index);
+
+  setTimeout(() => {
+    widget.play();
+  },150);
+}
+
+function nextTrack() {
+  if (!widget || !sounds.length) return;
+
+  const maxTracks = Math.min(sounds.length,TRACK_COUNT);
+
+  if (shuffleEnabled) {
+    if (!shuffleQueue.length) {
+      buildShuffleQueue(false);
+    }
+
+    shufflePosition++;
+
+    // 全曲再生したら新しい順番でシャッフル
+    if (shufflePosition >= shuffleQueue.length) {
+      const previousTrackIndex = currentIndex;
+
+      buildShuffleQueue(false);
+
+      if (
+        shuffleQueue.length > 1 &&
+        shuffleQueue[0] === previousTrackIndex
+      ) {
+        [shuffleQueue[0],shuffleQueue[1]] =
+          [shuffleQueue[1],shuffleQueue[0]];
+      }
+
+      shufflePosition = 0;
+    }
+
+    currentIndex = shuffleQueue[shufflePosition];
+
+  } else {
+    currentIndex = (currentIndex+1)%maxTracks;
+  }
+
+  playTrackAtIndex(currentIndex);
+}
+
+function previousTrack() {
+  if (!widget || !sounds.length) return;
+
+  const maxTracks = Math.min(sounds.length,TRACK_COUNT);
+
+  if (shuffleEnabled) {
+    if (!shuffleQueue.length) {
+      buildShuffleQueue(true);
+    }
+
+    shufflePosition = Math.max(0,shufflePosition-1);
+
+    currentIndex = shuffleQueue[shufflePosition];
+
+  } else {
+    currentIndex =
+      (currentIndex-1+maxTracks)%maxTracks;
+  }
+
+  playTrackAtIndex(currentIndex);
+}
+
+/* =========================================
+   VOLUME FADE-IN
+========================================= */
+
+function stopVolumeFade() {
+  if (fadeTimer) {
+    clearInterval(fadeTimer);
+    fadeTimer = null;
+  }
+}
+
+function startVolumeFade(targetVolume,durationMs) {
+  if (!widget) return;
+
+  stopVolumeFade();
+
+  const target = Math.max(0,Math.min(100,Number(targetVolume)));
+  const startedAt = performance.now();
+
+  widget.setVolume(0);
+
+  fadeTimer = setInterval(() => {
+    const elapsed = performance.now()-startedAt;
+    const ratio = Math.min(1,elapsed/durationMs);
+    const value = Math.round(target*ratio);
+
+    widget.setVolume(value);
+
+    if (ratio >= 1) {
+      stopVolumeFade();
+      widget.setVolume(Number(volume.value));
+      musicStatus.textContent = "SHUFFLE AUTOPLAY // READY";
+    }
+  },FADE_INTERVAL);
+}
+
+/* =========================================
+   AUTOMATIC PLAYBACK ATTEMPT
+========================================= */
+
+function startPlaylistAutoplay() {
+  if (!widget || !sounds.length || autoPlayStarted) return;
+
+  autoPlayStarted = true;
+  userEnabledAudio = true;
+
+  stopVolumeFade();
+
+  // 自動再生は必ずシャッフル
+  shuffleEnabled = true;
+
+  shuffleBtn.style.background =
+    "linear-gradient(145deg,#00eaff,#176aff)";
+
+  shuffleBtn.style.color = "#00101b";
+
+  // 現在の曲を固定せず、完全ランダムで開始
+  buildShuffleQueue(false);
+
+  currentIndex = shuffleQueue[0] ?? 0;
+
+  const targetVolume = Number(volume.value);
+
+  autoFadeTarget = targetVolume;
+  autoFadePending = true;
+
+  musicStatus.textContent =
+    "SHUFFLE AUTOPLAY // INITIALIZING";
+
+  // 再生開始前に音量を0にする
+  widget.setVolume(0);
+
+  // シャッフルされた最初の曲へ移動
+  widget.skip(currentIndex);
+
+  setTimeout(() => {
+    widget.play();
+  },250);
+
+  // 再生開始に失敗した場合の再試行
+  setTimeout(() => {
+    if (!isPlaying) {
+      widget.play();
+    }
+  },1800);
+}
+
+function schedulePlaylistAutoplay() {
+  if (autoPlayTimer) {
+    clearTimeout(autoPlayTimer);
+  }
+
+  autoPlayTimer = setTimeout(() => {
+    startPlaylistAutoplay();
+  },AUTO_PLAY_DELAY);
+}
+
+/* =========================================
+   BACKGROUND TRACK METADATA SCAN
+========================================= */
+
+/*
+  メインプレイヤーとは別のSoundCloud Widgetを使用する。
+  こちらは音量0でTRACK 6〜28を順番に読み込み、
+  曲情報とpermalink_urlを取得する。
+  メインプレイヤーの再生には干渉しない。
+*/
+
+function scannerGetCurrentSound() {
+  return new Promise(resolve => {
+    if (!scannerWidget) {
+      resolve(null);
+      return;
+    }
+
+    scannerWidget.getCurrentSound(sound => {
+      resolve(sound || null);
+    });
+  });
+}
+
+function scannerGetCurrentIndex() {
+  return new Promise(resolve => {
+    if (!scannerWidget) {
+      resolve(-1);
+      return;
+    }
+
+    scannerWidget.getCurrentSoundIndex(index => {
+      resolve(typeof index === "number" ? index : -1);
+    });
+  });
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve,ms));
+}
+
+async function scanTrackMetadata() {
+  if (!scannerWidget || scanStarted || !sounds.length) return;
+
+  scanStarted = true;
+
+  musicStatus.textContent =
+    "PLAYLIST CONNECTED // BACKGROUND METADATA SCAN";
+
+  scannerWidget.setVolume(0);
+
+  /*
+    TRACK 6〜28のみ走査。
+    0始まりのindexでは5〜27。
+  */
+
+  for (let index=5;index<TRACK_COUNT;index++) {
+    try {
+      scannerWidget.setVolume(0);
+      scannerWidget.skip(index);
+      scannerWidget.play();
+
+      let foundSound = null;
+
+      /*
+        skip直後はまだ前の曲情報が返る場合があるため、
+        indexが切り替わるまでポーリングする。
+      */
+
+      for (let attempt=0;attempt<30;attempt++) {
+        await delay(250);
+
+        const currentScannerIndex = await scannerGetCurrentIndex();
+
+        if (currentScannerIndex === index) {
+          const sound = await scannerGetCurrentSound();
+
+          if (sound) {
+            foundSound = sound;
+            break;
+          }
+        }
+      }
+
+      if (foundSound && sounds[index]) {
+        sounds[index] = {
+          ...sounds[index],
+          ...foundSound,
+          title:TRACK_TITLES[index]
+        };
+
+        renderQueue();
+      }
+
+    } catch (error) {
+      console.warn("Track metadata scan failed:",index+1,error);
+    }
+  }
+
+  scannerWidget.pause();
+  scannerWidget.setVolume(0);
+
+  scanFinished = true;
+
+  musicStatus.textContent =
+    "SOUNDCLOUD CONNECTED // TRACK DATA SCANNED";
+}
+
+/* =========================================
+   SOUNDCLOUD WIDGET INITIALIZATION
+========================================= */
+
+if (PLAYLIST_URL && window.SC) {
+
+  const widgetUrl =
+    "https://w.soundcloud.com/player/?url=" +
+    encodeURIComponent(PLAYLIST_URL) +
+    "&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=false";
+
+  frame.src = widgetUrl;
+
+  widget = SC.Widget(frame);
+
+  /*
+    別プレイヤーで曲情報を裏側から取得する。
+    auto_play=falseにして、READY後に音量0で走査を開始。
+  */
+
+  const scannerWidgetUrl =
+    "https://w.soundcloud.com/player/?url=" +
+    encodeURIComponent(PLAYLIST_URL) +
+    "&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false";
+
+  scannerFrame.src = scannerWidgetUrl;
+
+  scannerWidget = SC.Widget(scannerFrame);
+
+  scannerWidget.bind(SC.Widget.Events.READY,() => {
+    scannerWidget.setVolume(0);
+
+    scannerWidget.getSounds(result => {
+      if (result && result.length) {
+        scanTrackMetadata();
+      }
+    });
+  });
+
+  widget.bind(SC.Widget.Events.READY,() => {
+    musicStatus.textContent = "SOUNDCLOUD CONNECTED";
+
+    widget.getSounds(result => {
+      sounds = (result || []).slice(0,TRACK_COUNT);
+
+      /*
+        29曲目以降は配列から除外。
+        シャッフル、次曲移動、キュー表示にも含めない。
+      */
+
+      sounds = sounds.map((sound,index) => ({
+        ...sound,
+        title:TRACK_TITLES[index] || sound.title
+      }));
+
+      if (!sounds.length) {
+        musicStatus.textContent = "PLAYLIST EMPTY";
+        return;
+      }
+
+      currentIndex = 0;
+
+      updateTrack(sounds[0]);
+      renderQueue();
+
+      playBtn.disabled = false;
+      prevBtn.disabled = false;
+      nextBtn.disabled = false;
+      shuffleBtn.disabled = false;
+
+      /*
+        最初から音量0に設定。
+        5秒後の自動再生開始時にフェードインする。
+      */
+
+      widget.setVolume(0);
+
+      schedulePlaylistAutoplay();
+    });
+  });
+
+widget.bind(SC.Widget.Events.PLAY,() => {
+  updatePlayState(true);
+
+  // 実際に再生が始まったタイミングでフェードイン
+  if (autoFadePending) {
+    autoFadePending = false;
+
+    startVolumeFade(
+      autoFadeTarget,
+      FADE_DURATION
+    );
+
+    musicStatus.textContent =
+      "SHUFFLE AUTOPLAY // FADE IN";
+  }
+
+  widget.getCurrentSound(sound => {
+    if (sound) {
+      const foundIndex = sounds.findIndex(s=>s.id===sound.id);
+
+      if (foundIndex >= 0) {
+        currentIndex = foundIndex;
+
+        sounds[foundIndex] = {
+          ...sounds[foundIndex],
+          ...sound,
+          title:TRACK_TITLES[foundIndex]
+        };
+
+        if (shuffleEnabled) {
+          const position = shuffleQueue.indexOf(foundIndex);
+
+          if (position >= 0) {
+            shufflePosition = position;
+          }
+        }
+      }
+
+      updateTrack(sound);
+    }
+  });
+});
+
+  widget.bind(SC.Widget.Events.PAUSE,() => {
+    updatePlayState(false);
+  });
+
+  widget.bind(SC.Widget.Events.FINISH,() => {
+    nextTrack();
+  });
+
+  widget.bind(SC.Widget.Events.PLAY_PROGRESS,data => {
+    if (!data) return;
+
+    const position = data.currentPosition || 0;
+    const total = durationMs || 1;
+
+    progressFill.style.width =
+      Math.min(100,position/total*100)+"%";
+
+    currentTime.textContent = formatTime(position);
+  });
+
+  widget.bind(SC.Widget.Events.SEEK,data => {
+    if (!data) return;
+
+    currentTime.textContent =
+      formatTime(data.currentPosition || 0);
+  });
+
+} else {
+  musicStatus.textContent = "PLAYLIST URL NOT SET";
+
+  [playBtn,prevBtn,nextBtn,shuffleBtn].forEach(btn => {
+    btn.disabled = true;
+  });
+}
+
+/* =========================================
+   PLAYER CONTROLS
+========================================= */
+
+playBtn.addEventListener("click",() => {
+  if (!widget) return;
+
+  userEnabledAudio = true;
+
+  if (isPlaying) {
+    stopVolumeFade();
+    widget.pause();
+  } else {
+    stopVolumeFade();
+    widget.setVolume(Number(volume.value));
+    widget.play();
+  }
+});
+
+prevBtn.addEventListener("click",previousTrack);
+nextBtn.addEventListener("click",nextTrack);
+
+shuffleBtn.addEventListener("click",() => {
+  shuffleEnabled = !shuffleEnabled;
+
+  shuffleBtn.style.background = shuffleEnabled
+    ? "linear-gradient(145deg,#00eaff,#176aff)"
+    : "rgba(0,100,255,.12)";
+
+  shuffleBtn.style.color =
+    shuffleEnabled ? "#00101b" : "#00eaff";
+
+  if (shuffleEnabled) {
+    buildShuffleQueue(true);
+  } else {
+    shuffleQueue = [];
+    shufflePosition = 0;
+  }
+});
+
+progress.addEventListener("click",e => {
+  if (!widget || !durationMs) return;
+
+  const rect = progress.getBoundingClientRect();
+
+  const ratio = Math.max(0,Math.min(1,
+    (e.clientX-rect.left)/rect.width
+  ));
+
+  widget.seekTo(ratio*durationMs);
+});
+
+volume.addEventListener("input",() => {
+  const value = Number(volume.value);
+
+  volumeValue.textContent = value+"%";
+
+  /*
+    手動で音量を変更した場合はフェード処理を終了し、
+    ユーザーが指定した音量を優先する。
+  */
+
+  stopVolumeFade();
+
+  if (widget) widget.setVolume(value);
+});
+
+/* =========================================
+   AUTOPLAY RETRY AFTER USER INTERACTION
+========================================= */
+
+/*
+  自動再生がブラウザに拒否された場合の保険。
+  最初の操作で音声とSoundCloudを再試行する。
+  自動再生が既に成功している場合は何もしない。
+*/
+
+function retryMusicAfterGesture() {
+  if (!widget || isPlaying) return;
+
+  userEnabledAudio = true;
+
+  stopVolumeFade();
+
+  widget.setVolume(Number(volume.value));
+  widget.play();
+}
+
+window.addEventListener("pointerdown",retryMusicAfterGesture,{once:true});
+window.addEventListener("keydown",retryMusicAfterGesture,{once:true});
+
+/* =========================================
+   MUSIC SECTION AUTO PLAY ATTEMPT
+========================================= */
+
+let musicSectionSeen = false;
+
+const musicObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !musicSectionSeen) {
+      musicSectionSeen = true;
+
+      if (userEnabledAudio && widget && !isPlaying) {
+        widget.play();
+      }
+    }
+  });
+},{threshold:.35});
+
+musicObserver.observe(document.getElementById("music"));
+
+</script>
+
+</body>
+</html>
